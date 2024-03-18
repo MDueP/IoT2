@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container" style="display: grid;">
+    <h1>Dashboard</h1>
+    <div class="input-group mb-3">
+        <form action="/taend/" method="POST"><button class="btn btn-outline-secondary btn-light">Tænd LED</button></form>
+        <form action="/sluk/" method="POST"><button class="btn btn-outline-secondary btn-dark">Sluk LED</button></form>
+    </div>
+</div>
+
+{% endblock %}

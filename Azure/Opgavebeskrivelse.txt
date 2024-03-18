@@ -1,0 +1,14 @@
+Oversigt over dagens øvelse
+
+Ubuntu VM på Azure cloud
+- Skal køre MQTT broker
+- Skal køre Flask applikation
+- Subscribe til MQTT topic og modtage DHT11 data fra RPii og lægge i SQLite database
+- MQTT Publish ved knaptryk på website til kontrol af LED på RPi
+- Vise data fra databasen på graf med matplotlib
+
+
+Raspberry Pi
+- Publish DHT11 data
+- Subscribe knaptryk fra website til at
+toggle LED
