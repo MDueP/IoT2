@@ -76,7 +76,7 @@ sudo systemctl status mosquitto.service #om programmet kører
 sudo lsof -i -P -n | grep LISTEN #om porten er åben
 #########################################################
 #Installer modulerne med de her cmd:
-#pip install -r requirements.txt
+pip install -r requirements.txt
 #cd ind i mappen med filerne og kør flask run:
 nohup flask run --host=0.0.0.0 --debug & #--host 0.0.0.0, gør at den kører på alle åbne IP-Adresser
 #nohup gør at den kører efter man lukker for SSH forbindelsen

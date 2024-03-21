@@ -14,7 +14,7 @@ $vmParams = @{
     SubnetName = 'Subnet1'
     PublicIpAddressName = 'publicip'
     Credential = $cred
-    OpenPorts = 3389, 80, 22, 1883, 5000, 12000
+    OpenPorts = 3389, 80, 22, 1883, 5000
     Size = 'Standard_D2s_v3'
   }
   $accountname = 'blobaccountkeahold2a'
@@ -40,7 +40,7 @@ $publicIp = Get-AzPublicIpAddress -Name 'publicip' -ResourceGroupName $resourceg
 $publicIp |
   Select-Object -Property Name, IpAddress, @{label='FQDN';expression={$_.DnsSettings.Fqdn}}
 
-ssh Hold2a@20.162.122.217
+ssh Hold2a@20.254.227.63
 
 git clone https://github.com/MDueP/IoT2.git
 
@@ -53,10 +53,11 @@ sudo nano /etc/mosquitto/mosquitto.conf
 indsæt: listener 1883
         allow_anonymous true
         
-sudo reboot
+sudo systemctl restart mosquitto.service
 
 sudo systemctl status mosquitto.service 
 sudo lsof -i -P -n | grep LISTEN 
+sudo pip install -r requirements.txt
 nohup flask run --host=0.0.0.0 --debug & 
 
 $job = Remove-AzResourceGroup -Name $resourcegroup -Force -AsJob
