@@ -4,49 +4,49 @@ from flask import Flask, render_template
 from matplotlib.figure import Figure
 # from get_dht11_data import get_data
 import paho.mqtt.publish as publish
+from datetime import datetime
+from random import randint
 app = Flask(__name__)
 
 
-# def graph_temp():
-# timestamps, temp, hum = get_data(20)
-# fig = Figure()
-# ax = fig.subplots()
-# fig.subplots_adjust(bottom=0.3)
-# ax.tick_params(axis='x', which='both', rotation=30)
-# ax.set_facecolor("#dbe212")
-# ax.plot(timestamps, hum, linestyle="dotted",
-# c="#000", marker='o', linewidth='2', ms='5')
-# ax.set_xlabel("Timestamps")
-# ax.set_ylabel("Temperature Celsius")
-# fig.patch.set_facecolor("#fff")
-# ax.tick_params(axis="x", colors="black")
-# ax.tick_params(axis="y", colors="black")
-# buf = BytesIO()
-# fig.savefig(buf, format="png")
-# data = base64.b64encode(buf.getbuffer()).decode("ascii")
-# return data
+def graph_dht11():
+    hum = randint(20.0, 90.0)
+    fig = Figure()
+    ax = fig.subplots()
+    fig.subplots_adjust(bottom=0.3)
+    ax.tick_params(axis='x', which='both', rotation=30)
+    ax.set_facecolor("#dbe212")
+    ax.plot(timestamps, hum, linestyle="dotted",
+    c="#000", marker='o', linewidth='2', ms='5')
+    ax.set_xlabel("Timestamps")
+    ax.set_ylabel("Temp/hum")
+    fig.patch.set_facecolor("#fff")
+    ax.tick_params(axis="x", colors="black")
+    ax.tick_params(axis="y", colors="black")
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data
 
 
-# def graph_fugt():
-# timestamps, temp, hum = get_data(20)
-# fig = Figure()
-# ax = fig.subplots()
-# fig.subplots_adjust(bottom=0.3)
-# ax.tick_params(axis='x', which='both', rotation=30)
-# ax.set_facecolor("#12e2ca")
-# ax.plot(timestamps, hum, linestyle="dotted",
-# c="#000", marker='o', linewidth='2', ms='5')
-# ax.set_xlabel("Timestamps")
-# ax.set_ylabel("Humidity")
-# fig.patch.set_facecolor("#fff")
-# ax.tick_params(axis="x", colors="black")
-# ax.tick_params(axis="y", colors="black")
-# Save it to a temporary buffer.
-# buf = BytesIO()
-# fig.savefig(buf, format="png")
-# Embed the result in the html output.
-# data = base64.b64encode(buf.getbuffer()).decode("ascii")
-# return data
+def graph_mq135():
+    PPM =[randfloat(200.0, 4000.0)]
+    fig = Figure()
+    ax = fig.subplots()
+    fig.subplots_adjust(bottom=0.3)
+    ax.tick_params(axis='x', which='both', rotation=30)
+    ax.set_facecolor("#dbe212")
+    ax.plot(timestamps, PPM, linestyle="dotted",
+    c="#000", marker='o', linewidth='2', ms='5')
+    ax.set_xlabel("Timestamps")
+    ax.set_ylabel("PPM")
+    fig.patch.set_facecolor("#fff")
+    ax.tick_params(axis="x", colors="black")
+    ax.tick_params(axis="y", colors="black")
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data
 
 
 @app.route('/')
@@ -59,11 +59,11 @@ def Data():
     return render_template('Data.html')
 
 
-# @app.route('/DHT11graph')
-# def DHT11_graph():
-    temp = graph_temp()
-    fugt = graph_fugt()
-    return render_template('DHT11 graph.html', temp=temp, fugt=fugt)
+@app.route('/DHT11graph')
+def graph():
+    dht11 = graph_dht11()
+    mq135 = graph_mq135()
+    return render_template('DHT11 graph.html', dht11=dht11, mq135=mq135)
 
 
 @app.route('/Dashboard')
