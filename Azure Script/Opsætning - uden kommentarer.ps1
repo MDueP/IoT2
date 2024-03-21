@@ -40,7 +40,7 @@ $publicIp = Get-AzPublicIpAddress -Name 'publicip' -ResourceGroupName $resourceg
 $publicIp |
   Select-Object -Property Name, IpAddress, @{label='FQDN';expression={$_.DnsSettings.Fqdn}}
 
-ssh Hold2a@20.254.227.63
+ssh Hold2a@20.254.232.236
 
 git clone https://github.com/MDueP/IoT2.git
 
@@ -50,13 +50,26 @@ sudo apt install python3-flask
 sudo apt-get install -y mosquitto mosquitto-clients
 
 sudo nano /etc/mosquitto/mosquitto.conf
-indsæt: listener 1883
-        allow_anonymous true
-        
-sudo systemctl restart mosquitto.service
+indsæt:
 
+pid_file /run/mosquitto/mosquitto.pid
+
+user mosquitto
+max_queued_messages 200
+message_size_limit 0
+allow_zero_length_clientid true
+allow_duplicate_messages false
+
+listener 1883
+autosave_interval 900
+autosave_on_changes false
+persistence true
+persistence_file mosquitto.db
+allow_anonymous true
+log_dest file /var/log/mosquitto/mosquitto.log
+        
+sudo systemctl restart mosquitto
 sudo systemctl status mosquitto.service 
-sudo lsof -i -P -n | grep LISTEN 
 sudo pip install -r requirements.txt
 nohup flask run --host=0.0.0.0 --debug & 
 

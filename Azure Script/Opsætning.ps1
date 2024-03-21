@@ -55,7 +55,7 @@ $publicIp |
   Select-Object -Property Name, IpAddress, @{label='FQDN';expression={$_.DnsSettings.Fqdn}}
 #############################################################################################
 #ssh ind i den
-ssh Hold2a@20.162.122.217 #ændre det sidste alt efter hvad for en publicip man får
+ssh Hold2a@20.162.72.119 #ændre det sidste alt efter hvad for en publicip man får
 
 #############################################################################################
 #bash til setup af hjemmeside
@@ -67,10 +67,23 @@ sudo apt-get install -y mosquitto mosquitto-clients
 ########################################################
 #Få mosquitto op at køre:
 sudo nano /etc/mosquitto/mosquitto.conf
-indsæt: listener 1883
-        allow_anonymous true
-        #I bunden af filen
-sudo reboot
+indsæt:
+
+pid_file /run/mosquitto/mosquitto.pid
+
+user mosquitto
+max_queued_messages 200
+message_size_limit 0
+allow_zero_length_clientid true
+allow_duplicate_messages false
+
+listener 1883
+autosave_interval 900
+autosave_on_changes false
+persistence true
+persistence_file mosquitto.db
+allow_anonymous true
+log_dest file /var/log/mosquitto/mosquitto.log
 #Når vm er genstartet tjek med:
 sudo systemctl status mosquitto.service #om programmet kører
 sudo lsof -i -P -n | grep LISTEN #om porten er åben

@@ -1,17 +1,14 @@
-import paho.mqtt.publish as publish
-import json
-import Adafruit_DHT
-	
-sensor = Adafruit_DHT.DHT11
-pin = 4
+import paho.mqtt.client as mqtt
+import serial
+from time import sleep
+from random import randint
+
+# ser = serial.Serial("/dev/tty1", 9600)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+# data_send = ser.readline()
+client.connect("20.254.232.236")
 while True:
-	humidity, temperature = Adafruit-DHT.read_retry(sensor, pin)
-	if humidity is not None and temperature is not None:
-		payload ={
-			"temperature" : temperature,
-			"humidity" : humidity
-		}
-		publish.single("paho/test/topic", json.dumps(payload), hostname="Azure Public IP")
-		print('Temp={0:0.1f}*C Humidity={1:0:1f}%'.format(temperature, humidity))
-	else:
-		print('Failed to get reading. Try again')
+    random_value = randint(0, 100)
+    client.publish("LED", str(random_value))
+    # client.publish("LED", json.dumps(data_send))
+    sleep(0.5)
