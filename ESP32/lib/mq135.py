@@ -9,7 +9,7 @@ class MQ135V2(object):
     # ADC value to voltage first degree equation coefficients
     __alpha = 0.000838616
     __beta = 0.097068
-    RLOAD = 140.0
+    RLOAD = 22.0
     RZERO = 100
     PARA = 116.6020682
     PARB = 2.769034857
@@ -45,9 +45,11 @@ class MQ135V2(object):
         for i in range(256):
             value += self.__adc.read()
         value = value >> 8
+        if value <= 0:
+            value = 1
         last_value = (2048.0/value - 1.0) * self.RLOAD
         if last_value <= 0:
-            last_value = 0.01349408
+            last_value = 1
         return last_value
     
     def get_corrected_resistance(self, temperature, humidity):
@@ -71,3 +73,4 @@ class MQ135V2(object):
         """Returns the resistance RZero of the sensor (in kOhms) for calibration purposes
         corrected for temperature/humidity"""
         return self.get_corrected_resistance(temperature, humidity) * math.pow((self.ATMOCO2/self.PARA), (1./self.PARB))
+
