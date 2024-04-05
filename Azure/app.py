@@ -4,20 +4,22 @@ from flask import Flask, render_template
 from matplotlib.figure import Figure
 # from get_dht11_data import get_data
 import paho.mqtt.publish as publish
-from datetime import datetime
+import datetime
 from random import randint
 app = Flask(__name__)
 
 
 def graph_dht11():
-    hum = randint(20.0, 90.0)
+    hum = [randint(20, 90) for i in range(10)]
+    Timestamps = [datetime.datetime.now() + datetime.timedelta(hours=i)
+                  for i in range(10)]
     fig = Figure()
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0.3)
     ax.tick_params(axis='x', which='both', rotation=30)
     ax.set_facecolor("#dbe212")
-    ax.plot(timestamps, hum, linestyle="dotted",
-    c="#000", marker='o', linewidth='2', ms='5')
+    ax.plot(Timestamps, hum, linestyle="dotted",
+            c="#000", marker='o', linewidth='2', ms='5')
     ax.set_xlabel("Timestamps")
     ax.set_ylabel("Temp/hum")
     fig.patch.set_facecolor("#fff")
@@ -30,14 +32,16 @@ def graph_dht11():
 
 
 def graph_mq135():
-    PPM =[randfloat(200.0, 4000.0)]
+    PPM = [randint(200, 4000) for j in range(10)]
+    Timestamps = [datetime.datetime.now() + datetime.timedelta(hours=i)
+                  for i in range(10)]
     fig = Figure()
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0.3)
     ax.tick_params(axis='x', which='both', rotation=30)
     ax.set_facecolor("#dbe212")
-    ax.plot(timestamps, PPM, linestyle="dotted",
-    c="#000", marker='o', linewidth='2', ms='5')
+    ax.plot(Timestamps, PPM, linestyle="dotted",
+            c="#000", marker='o', linewidth='2', ms='5')
     ax.set_xlabel("Timestamps")
     ax.set_ylabel("PPM")
     fig.patch.set_facecolor("#fff")
