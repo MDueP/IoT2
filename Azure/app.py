@@ -2,17 +2,32 @@ import base64
 from io import BytesIO
 from flask import Flask, render_template
 from matplotlib.figure import Figure
-# from get_dht11_data import get_data
+
 import paho.mqtt.publish as publish
 import datetime
 from random import randint
 app = Flask(__name__)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+client.connect("localhost", 1883)
+client.subscribe("ESP32")
+
+
+def message(message):
+    with open("mqttdata_txt", "a") as file:
+        file.write(f"{message.topic}: {message.payload.decode('utf-8')}\n")
+
+
+client.on_message = message
+client.loop_start()
 
 
 def graph_dht11():
-    hum = [randint(20, 90) for i in range(10)]
-    Timestamps = [datetime.datetime.now() + datetime.timedelta(hours=i)
-                  for i in range(10)]
+    with open("mqttdata_txt", "r") as file:
+        lines = file.readlines()
+        hum = [int(line.split(": ")[1])
+               for line in lines if "DHT11_humidity" in line]
+        Timestamps = [datetime.datetime.now() - datetime.timedelta(seconds=i*10)
+                      for i in range(len(hum))]
     fig = Figure()
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0.3)
@@ -32,9 +47,12 @@ def graph_dht11():
 
 
 def graph_mq135():
-    PPM = [randint(200, 4000) for j in range(10)]
-    Timestamps = [datetime.datetime.now() + datetime.timedelta(hours=i)
-                  for i in range(10)]
+    with open("mqttdata_txt", "r") as file:
+        lines = file.readlines()
+        PPM = [int(line.split(": ")[1])
+               for line in lines if "MQ135_PPM" in line]
+        Timestamps = [datetime.datetime.now() - datetime.timedelta(seconds=i*10)
+                      for i in range(len(PPM))]
     fig = Figure()
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0.3)
