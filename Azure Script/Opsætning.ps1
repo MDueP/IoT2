@@ -55,7 +55,7 @@ $publicIp |
   Select-Object -Property Name, IpAddress, @{label='FQDN';expression={$_.DnsSettings.Fqdn}}
 #############################################################################################
 #ssh ind i den
-ssh Hold2a@20.162.72.119 #ændre det sidste alt efter hvad for en publicip man får
+ssh Hold2a@20.162.97.28 #ændre det sidste alt efter hvad for en publicip man får
 
 #############################################################################################
 #bash til setup af hjemmeside
