@@ -32,9 +32,10 @@ while True:
         print(f'Could not insert! {e}')
     finally:
         cur.execute("""SELECT * FROM DHT11 ORDER BY ID DESC LIMIT 1""")
+        dataudtræk1 = cur.fetchall()
         cur.execute("""SELECT * FROM MQ135 ORDER BY ID DESC LIMIT 1""")
         dataudtræk2 = cur.fetchall()
-        datapub = [dataudtræk2]
+        datapub = [dataudtræk1, dataudtræk2]
         strdata = ','.join([str(datapub)])
         print(strdata)
         client.publish("ESP32", (strdata))

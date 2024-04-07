@@ -100,4 +100,4 @@ def sluk():
     return render_template('sluk.html')
 
 
-app.run(debug=True)
+app.run(host="0.0.0.0", debug=True)
