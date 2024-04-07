@@ -4,7 +4,21 @@ from flask import Flask, render_template
 from matplotlib.figure import Figure
 import datetime
 from random import randint
+import paho.mqtt.client as mqtt
 app = Flask(__name__)
+
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+client.connect("localhost", 1883)
+client.subscribe("ESP32")
+
+
+def message(client, userdata, message):
+    with open("mqttdata.txt", "a") as file:
+        file.write(f"{message.topic}: {message.payload.decode('utf-8')}\n")
+
+
+client.on_message = message
+client.loop_start()
 
 
 def graph_dht11():
