@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 
 ser = serial.Serial("/dev/ttyS0", 9600)
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-client.connect("20.254.233.160")
+client.connect("20.162.97.36")
 
 query_dht = """INSERT INTO DHT11 (DATETIME, TEMPERATURE, HUMIDITY) VALUES(?,?,?)"""
 query_mq135 = """INSERT INTO MQ135 (DATETIME, PPM) VALUES(?,?)"""
@@ -34,7 +34,7 @@ while True:
         cur.execute("""SELECT * FROM DHT11 ORDER BY ID DESC LIMIT 1""")
         cur.execute("""SELECT * FROM MQ135 ORDER BY ID DESC LIMIT 1""")
         dataudtræk2 = cur.fetchall()
-        datapub = [dataudtræk1, dataudtræk2]
+        datapub = [dataudtræk2]
         strdata = ','.join([str(datapub)])
         print(strdata)
         client.publish("ESP32", (strdata))
