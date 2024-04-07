@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 def graph_dht11():
-    hum = [randint(20, 90) for i in range(10)]
+    hum = [randint(20, 90) for j in range(10)]
     Timestamps = [datetime.datetime.now() + datetime.timedelta(hours=i)
                   for i in range(10)]
     fig = Figure()
